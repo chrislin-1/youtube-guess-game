@@ -8,12 +8,16 @@
 <body>
     <h1>Youdle: The Daily Youtube Guess Game</h1>
     <p>Today's video has <strong>10,234,823 views</strong></p>
-    <input type="text" id="search-input"   placeholder="Search Youtube..." />
-    <button id="search-button">Search</button>
+    <div id="search-container">
+        <input type="text" id="search-input" placeholder="Guess the video...">
+        <div id="suggestions" class="suggestions"></div>
+        <button id="search-button">Search</button>
+    </div>
 
     <div id="results"></div>
     <div id="hint-output"></div>   
 
+    <script src="top_videos.js"></script> 
     <script src="script.js"></script> 
 </body>
 </html>
