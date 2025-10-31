@@ -18,7 +18,6 @@ h1 {
 h2 {
   font-size: 24px;
   font-weight: 600;
-  text-align: left;
   color: #c00; /* YouTube red */
 }
 
@@ -27,6 +26,13 @@ h3 {
   font-weight: 600;
   text-align: left;
   color: #c00; /* YouTube red */
+}
+
+.logo{
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  color: #c00;
 }
 
 /* --- SEARCH BAR --- */
@@ -90,13 +96,13 @@ h3 {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-  width: 876px;
+  width: 640px;
 }
 
 /* Thumbnail acts like video player */
 .today-thumbnail {
   width: 100%;
-  height: 480px;
+  height: 360px;
   object-fit: cover;
   display: block;
 }
@@ -118,7 +124,7 @@ h3 {
 
 .video-title {
   /*border: 2px solid red; /* visualize where it is */
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: black;
 }
@@ -146,7 +152,7 @@ h3 {
   border-radius: 12px;
   display: flex;
   flex-direction: column;
-  width: 853.33px
+  width: 640px;
 }
 
 #description {
@@ -180,16 +186,62 @@ h3 {
   min-height: 200px;
 }
 
+/* Each hint card acts like a mini suggested video */
 .hint-item {
-  display: flex;
-  align-items: center;
-  background-color: #f1f1f1;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  padding: 8px;
-  gap: 8px;
+  position: relative;
+  perspective: 1000px;
+  width: 100%;
+  margin-bottom: 12px; /* adds spacing between cards */
+  height: 100px; /* ensures each card has its own space */
+  border: none; /* remove debug outline */
+  border-radius: 8px;
+  overflow: hidden;
 }
 
+/* Inner wrapper that actually flips */
+.hint-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.8s ease;
+  transform-origin: center;
+}
+
+/* Make the flip visible */
+.hint-item.flip .hint-inner {
+  transform: rotateX(180deg);
+}
+
+/* Each side of the card */
+.hint-front, .hint-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  backface-visibility: hidden;
+  background-color: #f1f1f1;
+  border-radius: 8px;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+/* Back face flipped 180 degrees */
+.hint-back {
+  transform: rotateX(180deg);
+}
+
+.hint-back.hint-close {
+  background-color: yellow;
+}
+
+.hint-back.hint-far {
+  background-color: red;
+}
+
+/* Thumbnail size (like YouTube suggested videos) */
 .hint-thumbnail {
   width: 168px;
   height: 94px;
@@ -197,14 +249,18 @@ h3 {
   object-fit: cover;
 }
 
+/* Text info next to thumbnail */
 .hint-info {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .hint-text {
   font-size: 0.9rem;
-  color: #333;
+  color: #111;
 }
+
 
 
 /* Hover highlight */
@@ -224,4 +280,62 @@ h3 {
     width: 100%;
     margin-top: 20px;
   }
+}
+
+/* --- Modal Overlay --- */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999; /* sits on top of everything */
+  transition: opacity 0.3s ease;
+}
+
+/* Hidden by default */
+.modal.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* --- Modal Content Box --- */
+.modal-content {
+  background-color: #fff;
+  padding: 30px 40px;
+  border-radius: 16px;
+  text-align: center;
+  max-width: 400px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+.modal:not(.hidden) .modal-content {
+  transform: scale(1);
+}
+
+/* Close button (X) */
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  font-size: 28px;
+  color: #333;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  color: red;
+}
+
+/* Result GIF */
+.result-gif {
+  width: 100%;
+  border-radius: 12px;
+  margin-top: 20px;
 }

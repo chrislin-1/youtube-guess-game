@@ -2,7 +2,7 @@ const API_KEY = "AIzaSyCQ609JrmDhgRyajrZ2GT1RIBchIWhFyf8";
 
 /////////////////// NEW ITERATION WITH CUSTOM YOUTUBE VIDEO PLAYLIST /////////////////
 // 🟢 Replace this with your own playlist ID
-const PLAYLIST_ID = "PL8A83124F1D79BD4F"; // example: popular music videos
+const PLAYLIST_ID = "PL7o7Hbc7GS5sTCDAzsDRKBNvf67P7lpo6"; // example: popular music videos
 
 async function fetchTopVideos() {
   try {
@@ -18,7 +18,7 @@ async function fetchTopVideos() {
 
     // 2️⃣ Step 2: Fetch full video details using those IDs
     const videoResponse = await fetch(
-      `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${videoIds}&key=${API_KEY}`
+      `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics,status&id=${videoIds}&key=${API_KEY}`
     );
     const videoData = await videoResponse.json();
 
