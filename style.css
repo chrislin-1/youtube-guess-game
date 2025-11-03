@@ -72,7 +72,6 @@ h3 {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: 24px;
   padding: 0 40px 40px;
 }
 
@@ -107,19 +106,8 @@ h3 {
   display: block;
 }
 
-/* Details under video */
-.video-info-section {
-  /*border: 2px solid purple; /* visualize where it is */
-  border-radius: 0 0 12px 12px;
-}
-
 .video-info-section div {
   display: flex;
-}
-
-.video-info-section p {
-  font-weight: 600;
-  color: black;
 }
 
 .video-title {
@@ -160,6 +148,7 @@ h3 {
   color: black;
   font-weight: bold;
   margin: 10px;
+  margin-top: 0;
 }
 
 .description.yellow{
@@ -180,6 +169,7 @@ h3 {
 #views-date{
   display: flex;
   margin: 10px;
+  margin-bottom: 0;
 }
 
 #views {
@@ -296,19 +286,6 @@ h3 {
   transition: background-color 0.2s ease;
 }
 
-/* Responsive tweak for smaller screens */
-@media (max-width: 900px) {
-  .video-container {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  #hint-output {
-    width: 100%;
-    margin-top: 20px;
-  }
-}
-
 /* --- Modal Overlay --- */
 .modal {
   position: fixed;
@@ -365,4 +342,193 @@ h3 {
   width: 100%;
   border-radius: 12px;
   margin-top: 20px;
+}
+
+/* ----------------------------------------------------
+   📱 Mobile & Tablet Responsive Layout (<= 900px)
+   ---------------------------------------------------- */
+@media (max-width: 900px) {
+  body {
+    background-color: #000;        /* full black background */
+    color: #fff;                   /* default text becomes white */
+  }
+
+    /* Optional: adjust specific text elements for visibility */
+  h1, h2, h3, p, .description, .video-title, .video-channel {
+    color: #fff;
+  }
+
+  /* Stack main sections vertically instead of side-by-side */
+  .video-page {
+    flex-direction: column;
+    align-items: center;
+    padding: 12px;
+    /*gap: 20px;*/
+  }
+
+  /* Video container fills screen width */
+  .video-container,
+  .video-player-section,
+  #description-section {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  #description-section {
+    background-color: black;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+
+  /* Search bar fits narrow screens */
+  #search-container {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  #search-input {
+    background-color: #222;
+    color: #fff;
+    border: 1px solid #444;
+    width: 70%;
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  #search-button {
+    padding: 10px 16px;
+    font-size: 16px;
+  }
+
+  /* Make embedded video fluid */
+  iframe,
+  .today-thumbnail {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+  }
+
+  /* Description text centered & smaller */
+  .video-title {
+    font-size: 1rem;
+    text-align: left;
+    margin: 8px 0;
+  }
+
+  #channel-section {
+    align-items: center;
+  }
+
+  .channel-thumbnail {
+    width: 18px;           /* size of the circle */
+    height: 18px;          /* must be equal to width for a perfect circle */
+    border-radius: 50%;    /* makes it a circle */
+    object-fit: cover;     /* ensures the image fills the circle without stretching */
+    margin-right: 5px;
+  }
+
+  .video-channel {
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  #views-date{
+    display: flex;
+    margin: 0;
+  }
+
+  #views {
+    color: white;
+    font-size: 10px;
+    margin-right: 5px;
+  }
+
+  #date {
+    font-size: 10px;
+    color: white;
+  }
+
+  .description,
+  .description.big,
+  .description.yellow,
+  .description.green {
+    font-size: 10px;
+    text-align: left;
+    /*margin: 0 10px 10px;*/
+  }
+
+  /* Stack hints vertically, full width */
+  .hint-section,
+  #hint-output {
+    display: flex;
+    flex-direction: column;  /* force vertical stacking */
+    align-items: center;     /* center horizontally */
+    width: 100%;
+    gap: 12px;               /* spacing between guesses */
+  }
+
+  /* Let each hint keep natural height */
+  .hint-item {
+    width: 90%;              /* full width but not touching edges */
+    height: 50px;
+    max-width: 350px;        /* optional: keeps them neat */
+    padding: 0;
+    margin: 0;
+  }
+
+  .hint-front {
+    background-color: #222;
+    color: #fff;
+    border: 1px solid #444;
+  }
+
+  /* Each side of the card */
+  .hint-front, .hint-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    backface-visibility: hidden;
+    border-radius: 8px;
+    box-sizing: border-box;
+  }
+
+  .hint-thumbnail, .hint-thumbnail.icon {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;     /* prevents squishing images */
+  }
+
+  .hint-text {
+    font-size: 0.9rem;
+    text-justify: right;
+    font-weight: bold;
+    color: white;
+  }
+
+  /* Reduce header height and spacing */
+  .youtube-header {
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 0;
+  }
+
+  .brand {
+    font-size: 1.1rem;
+  }
+
+  /* Keep modal centered & readable on phones */
+  .modal-content {
+    width: 90%;
+    max-width: 360px;
+  }
 }

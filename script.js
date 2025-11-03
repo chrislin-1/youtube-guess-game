@@ -4,6 +4,8 @@ const MAX_GUESSES = 6;
 const placeholderImg = "images/dogofwisdom.webp";
 const hintBox = document.getElementById("hint-output");
 
+const isMobile = window.matchMedia("(max-width: 900px)").matches;
+
 function initializeHintBox() {
   hintBox.innerHTML = ""; // Clear old content
   for (let i = 0; i < MAX_GUESSES; i++) {
@@ -47,7 +49,7 @@ async function loadTopVideos() {
   //choose video and pull necessary info
   console.log(todayVideo);
   const todayViews = todayVideo.statistics.viewCount;
-  const todayTitle = todayVideo.snippet.title.toLowerCase();
+  const todayTitle = todayVideo.snippet.title;
   const todayChannel = todayVideo.snippet.channelTitle;
   const todayThumbnail = todayVideo.snippet.thumbnails.high.url;
   const todayId = todayVideo.id;
@@ -68,7 +70,6 @@ async function loadTopVideos() {
 
   //get elements from html
   const searchInput = document.getElementById("search-input");
-  const suggestionsContainer = document.getElementById("suggestions");
 
   const videoContainer = document.getElementById("video-container");
   videoContainer.innerHTML = `
@@ -95,12 +96,44 @@ async function loadTopVideos() {
           <h3 id="views">________views</p>
           <h3 id="date">${yearsAgo} years ago</p>
         </div>
-          <p class="description big">Guess the number of views the viral YouTube video has 😎</p> 
-          <p class="description yellow">Your guess is considered close if it's within 30% of the answer.</p>
-          <p class="description green">You win if your guess is within 5%.</p>
+        <p class="description big">Guess the number of views the viral YouTube video has 😎</p> 
+        <p class="description yellow">Your guess is considered close if it's within 30% of the answer.</p>
+        <p class="description green">You win if your guess is within 5%.</p>
       </div>
     </div>
   `;
+
+  if(isMobile){
+    console.log("Mobile device detected — simplifying layout");
+
+    videoContainer.innerHTML = `
+      <div class="video-player-section">
+        <iframe
+          width="640"
+          height="360"
+          src="https://www.youtube.com/embed/${todayId}"
+          title="${todayVideo.snippet.title}"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+
+      <div class="video-info-section">
+        <h2 class="video-title">${todayTitle}</h2>
+        <div id="description-section">
+          <div id="views-date">
+            <p id="views">________views</p>
+            <p id="date">${yearsAgo} years ago</p>
+          </div>
+        </div>
+        <div id="channel-section">
+          <img src="${channelThumbnail}" alt="${todayTitle}" class="channel-thumbnail">
+          <p class="video-channel">${todayChannel}</p>
+        </div>
+      </div>
+    `;
+  }
 
   console.log(`today views is ${todayViews}`);
 
