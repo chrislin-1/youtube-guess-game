@@ -19,10 +19,15 @@ function saveData(data) {
   fs.writeFileSync("./db.json", JSON.stringify(data, null, 2));
 }
 
-// Get today's video
+// Serve the daily video
 app.get("/api/today", (req, res) => {
-  const data = loadData();
-  res.json(data.todayVideo);
+  try {
+    const db = JSON.parse(fs.readFileSync("./db.json", "utf-8"));
+    res.json(db.todayVideo);
+  } catch (error) {
+    console.error("Error reading db.json:", error);
+    res.status(500).json({ error: "Daily video not found" });
+  }
 });
 
 // Post player stats

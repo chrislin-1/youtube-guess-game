@@ -1,9 +1,66 @@
 {
+  "date": "2025-11-06",
   "todayVideo": {
-    "id": "6PKQE8FM2Uw",
-    "title": "Shampoo Prank Original",
-    "channel": "Whatever",
-    "views": 26000000
-  },
-  "stats": []
+    "kind": "youtube#video",
+    "etag": "mYAx5rziJ_evReBjK-V3xliup28",
+    "id": "Tx1XIm6q4r4",
+    "snippet": {
+      "publishedAt": "2007-03-24T06:36:29Z",
+      "channelId": "UCDrJor35jYVnuC3JgRzheIw",
+      "title": "Potter Puppet Pals: The Mysterious Ticking Noise",
+      "description": "https://www.patreon.com/NeilC",
+      "thumbnails": {
+        "default": {
+          "url": "https://i.ytimg.com/vi/Tx1XIm6q4r4/default.jpg",
+          "width": 120,
+          "height": 90
+        },
+        "medium": {
+          "url": "https://i.ytimg.com/vi/Tx1XIm6q4r4/mqdefault.jpg",
+          "width": 320,
+          "height": 180
+        },
+        "high": {
+          "url": "https://i.ytimg.com/vi/Tx1XIm6q4r4/hqdefault.jpg",
+          "width": 480,
+          "height": 360
+        }
+      },
+      "channelTitle": "Neil Cicierega",
+      "tags": [
+        "harry",
+        "potter",
+        "puppet",
+        "pals",
+        "snape",
+        "ron",
+        "hermione",
+        "dumbledore",
+        "voldemort"
+      ],
+      "categoryId": "23",
+      "liveBroadcastContent": "none",
+      "defaultLanguage": "en",
+      "localized": {
+        "title": "Potter Puppet Pals: The Mysterious Ticking Noise",
+        "description": "https://www.patreon.com/NeilC"
+      },
+      "defaultAudioLanguage": "en"
+    },
+    "status": {
+      "uploadStatus": "processed",
+      "privacyStatus": "public",
+      "license": "youtube",
+      "embeddable": true,
+      "publicStatsViewable": true,
+      "madeForKids": false
+    },
+    "statistics": {
+      "viewCount": "209300410",
+      "likeCount": "1988286",
+      "favoriteCount": "0",
+      "commentCount": "152547"
+    },
+    "channelThumbnail": "https://yt3.ggpht.com/vBGoaNlQnlglRwXafG5cdIcZKb63TfM_2VV1UYzP0ccrt0xdwAOz9uVCAyb2_uUX0nqA4g_YGA=s88-c-k-c0x00ffffff-no-rj"
+  }
 }
