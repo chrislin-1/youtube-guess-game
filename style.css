@@ -8,8 +8,7 @@ body {
 }
 
 h1 {
-  font-size: 24px;
-  font-weight: 600;
+  font-weight: bold;
   color: #c00; /* YouTube red */
 }
 
@@ -26,10 +25,6 @@ h3 {
 }
 
 .logo{
-  position:absolute;
-  left: 15px;
-  top: 5px;
-  gap: 5px;
   display: flex;
   align-items: center;
   font-weight: bold;
@@ -56,14 +51,16 @@ h3 {
   background-color: #f9f9f9;
   justify-content: center;
   align-items: center;
+  height: 30px;
+  width: 30px;
 }
 
 .menu-button:hover {
   background-color: rgba(200, 200, 200, 0.3); /* light gray overlay */
 }
 
-#how-to-icon, #history-icon {
-  height: 30.88px;
+.menu-icon {
+  height: 30px;
 }
 
 #instructions-content {
@@ -410,19 +407,45 @@ h3 {
     color: #fff;
   }
 
+  #title {
+    color: rgb(255, 0, 0);
+  }
+
   header {
     display: flex;
     align-items: center;
-    height: 25px;
+    justify-content: center;
+    height: 30px;
   }
- 
-  .menu-right {
+
+  .menu-left {
+    position: absolute;
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 20px;
+    left: 1%;
+    object-fit: contain;
+  }  
+ 
+  .menu-right {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    right: 1%;
     object-fit: contain;
   } 
+
+  .logo{
+    gap: 5px;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    color: #c00;
+    height: 30px;
+  }  
 
   .menu-button {
     display: flex;
@@ -440,7 +463,7 @@ h3 {
   .video-page {
     flex-direction: column;
     align-items: center;
-    padding: 12px;
+    padding: 0;
     /*gap: 20px;*/
   }
 
@@ -450,6 +473,10 @@ h3 {
   #description-section {
     width: 100%;
     max-width: 100%;
+  }
+
+  .video-info-section {
+    padding: 12px;
   }
 
   #description-section {
@@ -503,8 +530,8 @@ h3 {
   }
 
   .channel-thumbnail {
-    width: 18px;           /* size of the circle */
-    height: 18px;          /* must be equal to width for a perfect circle */
+    width: 30px;           /* size of the circle */
+    height: 30px;          /* must be equal to width for a perfect circle */
     border-radius: 50%;    /* makes it a circle */
     object-fit: cover;     /* ensures the image fills the circle without stretching */
     margin-right: 5px;
@@ -598,7 +625,7 @@ h3 {
 
   /* Reduce header height and spacing */
   #youdle-header {
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     gap: 6px;
     padding: 8px 0;
@@ -614,6 +641,10 @@ h3 {
     max-width: 360px;
     background-color: #1a1b1e;
     padding:10px;
+  }
+
+  .instructions-title {
+    font-size: 24px;;
   }
 
   .your-text {

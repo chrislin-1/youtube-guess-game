@@ -9,7 +9,7 @@
 <body>
   <div id="instructions-modal" class="modal">
     <div id="instructions-content" class="modal-content">
-      <h1>How to Play</h1>
+      <h1 id="instructions-title">How to Play</h1>
       <h2>Guess how many views today's video has on YouTube. </h2>
       <p>With every guess, you'll learn how close you are to the actual answer, as well as if you're too high or too low.</p>
       <h2>Example Game:</h2>
@@ -49,20 +49,24 @@
     </div>
   </div>
   <header id="youdle-header">
-      <div class="logo">
-          <img src="images/nyancat.webp" alt="Youdle Logo" width="50"/>
-          <span class="brand">Youdle</span>
-      </div>
-      <div class="menu-right">
-        <button id="how-to-button" class="menu-button">
-          <img id="how-to-icon" src="images/how-to.png" alt="Question icons created by Shashank Singh - Flaticon"></img>
-          <p>How To Play</p>
-        </button>
-        <button id="history-button" class="menu-button">
-          <img id="history-icon" src="images/history.png" alt="History icons created by Tempo_doloe - Flaticon"></img>
-          <p>History</p>
-        </button>
-      </div>
+    <div class="menu-left">
+      <button id="menu-button">
+        <img class="menu-icon" src="images/menu.png" alt="menu">
+      </button>
+      <img class="menu-icon" src="images/nyancat.webp" alt="Youdle Logo" width="50"/>
+    </div>
+    <h1 id="title">You<span style="color: white;">Dle</span></h1>
+    <div class="menu-right">
+      <button id="how-to-button" class="menu-button">
+        <img class="menu-icon" src="images/how-to.png" alt="Question icons created by Shashank Singh - Flaticon"></img>
+        <p>How To Play</p>
+      </button>
+      <button id="history-button" class="menu-button">
+        <img class="menu-icon" src="images/history.png" alt="History icons created by Tempo_doloe - Flaticon"></img>
+        <p>History</p>
+      </button>
+    </div>
+
   </header>
     <div id="search-container" style="position: relative;" class="search-bar">
         <input type="text" id="search-input" placeholder="Guess how many views...">

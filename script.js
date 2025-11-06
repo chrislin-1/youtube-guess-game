@@ -35,6 +35,18 @@ initializeHintBox();
 
 /////////////// NOV 3: GENERATED JSON FILE OF VIDEOS OFFLINE, NO API CALL NEEDED FOR PLAYERS ANYMORE //////////////
 async function loadTopVideos() {
+  //choose video 
+  const response = await fetch("top_videos.json");
+  const topVideos = await response.json();
+
+  const todayVideo = getDailyVideo(topVideos.length, topVideos);
+
+  /*/ Select your daily video from this list
+  const random = Math.floor(Math.random() * topVideos.length);
+  const todayVideo = topVideos[random];
+  */
+
+  ////////////// MOVED ALL GAME LOGIC INSIDE FUNCTION SO THAT todayVideo CAN BE USED ////////////////
   const instructionsModal = document.getElementById("instructions-modal");
   // Show instructions on load
   window.addEventListener("load", () => {
@@ -48,18 +60,7 @@ async function loadTopVideos() {
     }
   });
 
-  const response = await fetch("top_videos.json");
-  const topVideos = await response.json();
-
-  // Select your daily video from this list
-  const random = Math.floor(Math.random() * topVideos.length);
-  const todayVideo = topVideos[random];
-
-  // Now continue your game logic using todayVideo...
-
-
-  ////////////// MOVED ALL GAME LOGIC INSIDE FUNCTION SO THAT todayVideo CAN BE USED ////////////////
-  //choose video and pull necessary info
+  //set variables
   console.log(todayVideo);
   const todayViews = todayVideo.statistics.viewCount;
   const answerFormatted = Number(todayViews).toLocaleString();
@@ -115,19 +116,23 @@ async function loadTopVideos() {
     </div>
   `;
 
+  ////////////////////// MOBILE ADJUSTMENTS //////////////////////
   if(isMobile){
     const header = document.getElementById("youdle-header");
     header.innerHTML = `
-      <div class="logo">
-          <img src="images/nyancat.webp" alt="Youdle Logo" width="50"/>
-          <span class="brand">Youdle</span>
+      <div class="menu-left">
+        <button class="menu-button" id="menu-bars">
+          <img class="menu-icon" src="images/menu-mobile.png" alt="menu">
+        </button>
+        <img class="menu-icon" src="images/nyancat.webp" alt="Youdle Logo" width="50"/>
       </div>
+      <h1 id="title">You<span style="color: white;">Dle</span></h1>
       <div class="menu-right">
         <button id="how-to-button" class="menu-button">
-          <img id="how-to-icon" src="images/how-to-mobile.png" alt="Question icons created by Shashank Singh - Flaticon"></img>
+          <img class="menu-icon" src="images/how-to-mobile.png" alt="Question icons created by Shashank Singh - Flaticon"></img>
         </button>
         <button id="history-button" class="menu-button">
-          <img id="history-icon" src="images/history-mobile.png" alt="History icons created by Tempo_doloe - Flaticon"></img>
+          <img class="menu-icon" src="images/history-mobile.png" alt="History icons created by Tempo_doloe - Flaticon"></img>
         </button>
       </div>
     `
@@ -309,4 +314,52 @@ async function loadTopVideos() {
 }
 
 loadTopVideos();
+
+// Utility: create a pseudo-random number from today's date
+function getDailyVideo(totalVideos, topVideos) {
+  const usedIds = JSON.parse(localStorage.getItem("usedVideos")) || [];
+  const today = new Date();
+  console.log("today full date", today);
+  const todayDay = today.getDate();
+  console.log("today day is", todayDay);
+  const yesterday = localStorage.getItem("todayDay");
+
+  if(yesterday != todayDay) {
+    console.log("yesterday is not equal to today");
+    console.log(`yesterday: ${yesterday}`);
+    console.log(`today: ${todayDay}`);
+    const seed = today.getFullYear() * 1000 + today.getMonth() * 31 + today.getDate();
+    const random = Math.abs(Math.sin(seed)) * 10000;
+    localStorage.setItem("todayDay", todayDay);
+
+    // Find today’s index
+    let index = Math.floor(random % totalVideos);
+    let todayVideo = topVideos[index];
+
+    // If this video was already used, find the next unused one
+    let safety = 0;
+    while (usedIds.includes(todayVideo.id) && safety < topVideos.length) {
+      index = (index + 1) % topVideos.length;
+      todayVideo = topVideos[index];
+      safety++;
+    }
+
+    // Store this video as used
+    usedIds.push(todayVideo.id);
+    localStorage.setItem("usedVideos", JSON.stringify(usedIds));
+    localStorage.setItem("todayVideo", JSON.stringify(todayVideo));
+
+    console.log(`🎥 Today's video: ${todayVideo.snippet.title}`);
+    console.log(`📅 Used videos: ${usedIds.length}/${topVideos.length}`);
+    return todayVideo;
+  } else {
+    return JSON.parse(localStorage.getItem("todayVideo"));
+  }
+}
+  // Get used video IDs from localStorage
+
+
+
+
+
 
