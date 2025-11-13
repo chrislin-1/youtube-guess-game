@@ -1,17 +1,22 @@
 import fs from "fs";
+import pkg from "pg";
 
-// Load top videos
+const { Client } = pkg;
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
+});
+
+await client.connect();
+
 const videos = JSON.parse(fs.readFileSync("./top_videos.json", "utf-8"));
-
-// Pick a random video
 const random = Math.floor(Math.random() * videos.length);
 const todayVideo = videos[random];
 
-// Save to db.json
-const db = {
-  date: new Date().toISOString().slice(0, 10),
-  todayVideo,
-};
+// Insert new video, replacing yesterday’s
+await client.query("DELETE FROM daily_video;");
+await client.query("INSERT INTO daily_video (data) VALUES ($1);", [todayVideo]);
 
-fs.writeFileSync("./db.json", JSON.stringify(db, null, 2));
 console.log(`✅ New daily video selected: ${todayVideo.snippet.title}`);
+
+await client.end();

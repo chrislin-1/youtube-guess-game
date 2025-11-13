@@ -1,34 +1,37 @@
 import express from "express";
-import fs from "fs";
 import cors from "cors";
+import pkg from "pg";
 
+const { Client } = pkg;
 const app = express();
-const PORT = process.env.PORT || 3000;
-
 app.use(cors());
 app.use(express.json());
 
-// Read database file
-function loadData() {
-  const raw = fs.readFileSync("./db.json");
-  return JSON.parse(raw);
-}
+// Create a single persistent database connection
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false } // Needed for Railway’s SSL setup
+});
+await client.connect();
 
-// Save database file
-function saveData(data) {
-  fs.writeFileSync("./db.json", JSON.stringify(data, null, 2));
-}
-
-// Serve the daily video
-app.get("/api/today", (req, res) => {
+// Get today’s video from DB
+app.get("/api/today", async (req, res) => {
   try {
-    const db = JSON.parse(fs.readFileSync("./db.json", "utf-8"));
-    res.json(db.todayVideo);
+    const { rows } = await client.query(
+      "SELECT data FROM daily_video ORDER BY date DESC LIMIT 1"
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "No daily video set yet" });
+    }
+
+    res.json(rows[0].data);
   } catch (error) {
-    console.error("Error reading db.json:", error);
-    res.status(500).json({ error: "Daily video not found" });
+    console.error("Error fetching daily video:", error);
+    res.status(500).json({ error: "Database query failed" });
   }
 });
+
 
 // Post player stats
 app.post("/api/stats", (req, res) => {
