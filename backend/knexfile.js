@@ -1,6 +1,3 @@
-// knexfile.js
-import 'dotenv/config';
-
 const config = {
   development: {
     client: "pg",
