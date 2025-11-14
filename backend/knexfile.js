@@ -1,16 +1,18 @@
-module.exports = {
+// knexfile.js as ESM
+const config = {
   development: {
     client: "pg",
     connection: {
-      host: "interchange.proxy.rlwy.net",
-      user: "postgres",
-      password: "CvdwujClMKSgjyioPVSAFvWodTlvDQWj",
-      database: "railway",
-      port: 37104,
-      ssl: { rejectUnauthorized: false } // needed for Railway
+      host: process.env.DB_HOST || "localhost",
+      user: process.env.DB_USER || "postgres",
+      password: process.env.DB_PASSWORD || "password",
+      database: process.env.DB_NAME || "youtube_game",
+      ssl: { rejectUnauthorized: false }
     },
     migrations: {
       directory: "./migrations"
     }
   }
 };
+
+export default config;
