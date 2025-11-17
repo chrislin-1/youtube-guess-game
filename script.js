@@ -344,7 +344,7 @@ async function loadTopVideos() {
   async function submitResult(gameWon, numGuesses) {
     const gameDate = new Date().toISOString().split("T")[0];
   
-    await fetch("/api/results", {
+    await fetch(`${API_BASE}/api/results`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -357,7 +357,7 @@ async function loadTopVideos() {
   }
   
   async function showGlobalStats() {
-    const res = await fetch("/api/stats/today");
+    const res = await fetch('${API_BASE}/api/stats/today');
     const stats = await res.json();
   
     // Example: update modal or stats UI
