@@ -14,12 +14,9 @@ const config = {
   },
   production: {
     client: "pg",
-    connection: process.env.DATABASE_URL || {
-      host: process.env.PGHOST,
-      user: process.env.PGUSER,
-      password: process.env.PGPASSWORD,
-      database: process.env.PGDATABASE,
-      ssl: { rejectUnauthorized: false } // Railway requires SSL
+    connection: {
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false }
     },
     migrations: {
       directory: "./migrations"
