@@ -2,11 +2,10 @@ const config = {
   development: {
     client: "pg",
     connection: {
-      host: process.env.DB_HOST || "localhost",
+      host: "127.0.0.1",
       user: process.env.DB_USER || "postgres",
-      password: process.env.DB_PASSWORD || "password",
+      password: process.env.DB_PASSWORD || "",
       database: process.env.DB_NAME || "youtube_game",
-      ssl: false
     },
     migrations: {
       directory: "./migrations"

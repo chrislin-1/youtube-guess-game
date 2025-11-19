@@ -1,22 +1,27 @@
 import fs from "fs";
-import pkg from "pg";
+import db from "./db.js";   // <--- use your shared Knex instance
 
-const { Client } = pkg;
-const client = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
-});
+async function selectDailyVideo() {
+  try {
+    // Load video list
+    const videos = JSON.parse(fs.readFileSync("./top_videos.json", "utf-8"));
 
-await client.connect();
+    // Pick a random video
+    const random = Math.floor(Math.random() * videos.length);
+    const todayVideo = videos[random];
 
-const videos = JSON.parse(fs.readFileSync("./top_videos.json", "utf-8"));
-const random = Math.floor(Math.random() * videos.length);
-const todayVideo = videos[random];
+    // Replace yesterday’s daily video
+    await db("daily_video").del(); // DELETE FROM daily_video;
+    await db("daily_video").insert({ data: todayVideo }); // INSERT new row
 
-// Insert new video, replacing yesterday’s
-await client.query("DELETE FROM daily_video;");
-await client.query("INSERT INTO daily_video (data) VALUES ($1);", [todayVideo]);
+    console.log(`✅ New daily video selected: ${todayVideo.snippet.title}`);
 
-console.log(`✅ New daily video selected: ${todayVideo.snippet.title}`);
+  } catch (err) {
+    console.error("❌ Failed to select daily video:", err);
+  } finally {
+    // IMPORTANT: close Knex so Node exits cleanly
+    await db.destroy();
+  }
+}
 
-await client.end();
+selectDailyVideo();

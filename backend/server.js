@@ -75,7 +75,7 @@ app.get("/api/stats/today", async (req, res) => {
 
     const guessDistribution = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
     guessesQuery.forEach(row => {
-      guessDistribution[row.guesses] = ((row.count / totalWins) * 100).toFixed();
+      guessDistribution[row.guesses] = ((row.count / totalGames) * 100).toFixed();
     });
 
     res.json({
@@ -90,5 +90,5 @@ app.get("/api/stats/today", async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
