@@ -1,5 +1,5 @@
 ////////////////////// CHANG API BASE FOR DEV VS PROD //////////////////////
-const API_BASE = "https://youtube-guess-game-production.up.railway.app";
+const API_BASE = "https://you tube-guess-game-production.up.railway.app";
 //const API_BASE = "http://localhost:8080"; 
 
 
@@ -134,7 +134,7 @@ async function loadTopVideos() {
     const header = document.getElementById("youdle-header");
     header.innerHTML = `
       <div class="menu-left">
-        <button class="menu-button" id="menu-bars">
+        <button id="menu-bars" class="menu-button">
           <img class="menu-icon" src="images/menu-mobile.png" alt="menu">
         </button>
         <img class="menu-icon" src="images/nyancat.webp" alt="Youdle Logo" width="50"/>
