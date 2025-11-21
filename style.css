@@ -401,7 +401,6 @@ h3 {
   cursor: pointer;
 }
 
-
 .stats-row {
   display: flex;
   justify-content: space-around;
@@ -454,8 +453,25 @@ h3 {
   font-weight: bold;
 }
 
-#result-title {
+.personal-stat-content {
+  display:flex;
+  flex-direction: row;
+  justify-content: center;
+}
 
+.personal-stat {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.stat-num {
+  font-weight: bold;
+  font-size: 44px;
+}
+
+.stat-title {
+  font-size: small;
 }
 
 /* ----------------------------------------------------

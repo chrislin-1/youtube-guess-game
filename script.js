@@ -1,6 +1,6 @@
 ////////////////////// CHANG API BASE FOR DEV VS PROD //////////////////////
-const API_BASE = "https://youdle-production.up.railway.app";
-//const API_BASE = "http://localhost:8080"; 
+//const API_BASE = "https://youdle-production.up.railway.app";
+const API_BASE = "http://localhost:8080"; 
 
 
 async function loadTodayVideo() {
@@ -45,17 +45,7 @@ initializeHintBox();
 
 /////////////// NOV 3: GENERATED JSON FILE OF VIDEOS OFFLINE, NO API CALL NEEDED FOR PLAYERS ANYMORE //////////////
 async function loadTopVideos() {
-  /*choose video 
-  const response = await fetch("top_videos.json");
-  const topVideos = await response.json();
-  */
- 
   const todayVideo = await loadTodayVideo();
-  
-  /*/ Select your daily video from this list
-  const random = Math.floor(Math.random() * topVideos.length);
-  const todayVideo = topVideos[random];
-  */
 
   ////////////// MOVED ALL GAME LOGIC INSIDE FUNCTION SO THAT todayVideo CAN BE USED ////////////////
   const instructionsModal = document.getElementById("instructions-modal");
@@ -72,6 +62,31 @@ async function loadTopVideos() {
     }
   }
   window.addEventListener("click", handleInstructionsModalClick);
+
+  await setLocalStatsElements();
+
+  function setLocalStatsElements() {
+    const gamesPlayed = localStorage.getItem("youdle_totalGames") || 0;
+    const winRate = (gamesPlayed/localStorage.getItem("youdle_gamesWon")) * 100 || 0;
+    const currentStreak = localStorage.getItem("youdle_currentStreak") || 0;
+    const maxStreak = localStorage.getItem("youdle_maxStreak") || 0;
+    document.getElementById("games-played").innerHTML=`
+      <div class="stat-num">${gamesPlayed}</div>
+      <div class="stat-title">Games Played</div>
+    `;
+    document.getElementById("personal-win-rate").innerHTML=`
+      <div class="stat-num">${winRate}%</div>
+      <div class="stat-title">Win Rate</div>
+    `;
+    document.getElementById("current-streak").innerHTML=`
+      <div class="stat-num">${currentStreak}</div>
+      <div class="stat-title">Current Streak</div>
+    `;
+    document.getElementById("max-streak").innerHTML=`
+      <div class="stat-num">${maxStreak}</div>
+      <div class="stat-title">Max Streak</div>
+    `;
+  }
 
   //set variables
   console.log(todayVideo);
@@ -134,8 +149,8 @@ async function loadTopVideos() {
     const header = document.getElementById("youdle-header");
     header.innerHTML = `
       <div class="menu-left">
-        <button id="menu-bars" class="menu-button">
-          <img class="menu-icon" src="images/menu-mobile.png" alt="menu">
+        <button id="stats-button" class="menu-button">
+          <img class="menu-icon" src="images/stats-mobile.png" alt="Graph icons created by Bamicon - Flaticon"></img>
         </button>
         <img class="menu-icon" src="images/nyancat.webp" alt="Youdle Logo" width="50"/>
       </div>
@@ -182,7 +197,7 @@ async function loadTopVideos() {
   console.log(`today views is ${todayViews}`);
 
   // --- Modal Elements ---
-  const modal = document.getElementById("result-modal");
+  const resultModal = document.getElementById("result-modal");
   const closeModal = document.getElementById("close-modal");
   const closeResults = document.getElementById("close-results");
   const resultTitle = document.getElementById("result-title");
@@ -197,7 +212,7 @@ async function loadTopVideos() {
       resultTitle.innerHTML = `😢 You lost, but at least you're not an internet loser? Today's video has <span style=color:red>${answerFormatted} views</span>`;
       resultGif.src = "https://i0.wp.com/badbooksgoodtimes.com/wp-content/uploads/2013/06/threw-it-on-the-ground-1.gif?fit=389%2C219&ssl=1"; // sad GIF
     }
-    modal.classList.remove("hidden");
+    resultModal.classList.remove("hidden");
   }
 
   // Function to hide instructions modal 
@@ -208,14 +223,14 @@ async function loadTopVideos() {
 
   // Function to hide results modal 
   function handleCloseResultsClick() {
-    modal.classList.add("hidden");
+    resultModal.classList.add("hidden");
   }
   closeResults.addEventListener("click", handleCloseResultsClick);
 
   // Optional: click outside modal to close both modals
   function handleModalClick(e) {
-    if (e.target === modal) {
-      modal.classList.add("hidden");
+    if (e.target === resultModal) {
+      resultModal.classList.add("hidden");
     }
   }
   window.addEventListener("click", handleModalClick);
@@ -242,7 +257,7 @@ async function loadTopVideos() {
   
   //////////////////////////// SUBMITTED ANSWER LOGIC ////////////////////////////////
   let guessCount = 0;
-  function handleSearchButtonClick() {
+  async function handleSearchButtonClick() {
     if (guessCount >= MAX_GUESSES) return; // stop at 6 guesses
     const query = searchInput.value;
     const guessViews = Number(query.replace(/,/g, "")); 
@@ -269,10 +284,12 @@ async function loadTopVideos() {
       viewsElement.textContent = `${answerFormatted} views`;
       viewsElement.style.color = "green";
       currentBack.style.backgroundColor = "green";
+      await submitResult(true, guessCount + 1);
+      await updateLocalStats(true);
+      await setLocalStatsElements();
       showResultModal(true);
       endGame();
-      submitResult(true, guessCount + 1);
-      showStats();
+      await showStats();
     } else if (ViewDifference > 0) {
         guessThumbnail = "images/up.png";
         backImg.textContent="Like icons created by Gregor Cresnar - Flaticon";
@@ -289,11 +306,13 @@ async function loadTopVideos() {
       if(guessCount >= MAX_GUESSES - 1) {
         viewsElement.textContent = `${answerFormatted} views`;
         console.log(`incorrect, the video has ${answerFormatted} views`)
+        await submitResult(false, guessCount + 1);
+        await updateLocalStats(false);
+        await setLocalStatsElements();
         showResultModal(false);
         endGame();
-        submitResult(false, guessCount + 1);
         console.log("submitting loss");
-        showStats();
+        await showStats();
       } 
     } else {
         guessThumbnail = "images/down.png";
@@ -311,10 +330,12 @@ async function loadTopVideos() {
       if(guessCount >= MAX_GUESSES - 1) {
         viewsElement.textContent = `${answerFormatted} views`;
         console.log(`incorrect, the video has ${answerFormatted} views`)
+        await submitResult(false, guessCount + 1);
+        await updateLocalStats(false);
+        await setLocalStatsElements();
         showResultModal(false);
-        endGame();
-        submitResult(false, guessCount + 1);
-        showStats();
+        endGame();        
+        await showStats();
       }
     }
 
@@ -337,6 +358,25 @@ async function loadTopVideos() {
       const stats = await res.json();
 
       // Update simple numbers
+      document.getElementById("global-stats").innerHTML = `                
+          <h2 id="today-stat-title">Today's Stats</h2>
+
+          <div class="stats-row">
+            <div class="stat-block">
+              <div class="stat-number" id="total-games">0</div>
+              <div class="stat-label">Plays</div>
+            </div>
+            <div class="stat-block">
+              <div class="stat-number" id="win-rate">0%</div>
+              <div class="stat-label">Win Rate</div>
+            </div>
+          </div>
+
+          <h3 id="global-stat-title">Global Guess Distribution</h3>
+          <div id="guess-distribution" class="guess-bars">
+            <!-- Bars inserted dynamically -->
+          </div>
+      `;
       document.getElementById("total-games").textContent = stats.totalGames;
       document.getElementById("win-rate").textContent = stats.winRate + "%";
 
@@ -405,11 +445,87 @@ async function loadTopVideos() {
   }
   searchInput.addEventListener("keypress", handleSearchInputKeypress);
 
+  //Menu Buttons
+  const statsButton = document.getElementById('stats-button');
   const infoButton = document.getElementById('how-to-button');
   function handleInfoButtonClick() {
     instructionsModal.classList.remove("hidden");    
   }
   infoButton.addEventListener("click", handleInfoButtonClick);
+
+  function handleStatsButtonClick() {
+    resultModal.classList.remove("hidden");
+  }
+  statsButton.addEventListener("click", handleStatsButtonClick);
+
+  function updateLocalStats(gameWon) {
+    console.log("Updating local stats");
+    console.log("gamewon:", gameWon);    
+    const today = new Date().toISOString().split("T")[0];
+    const lastPlayed = localStorage.getItem("youdle_lastPlayed");
+    console.log("last played", lastPlayed);
+
+    let currentStreak = Number(localStorage.getItem("youdle_currentStreak")) || 0;
+    let maxStreak = Number(localStorage.getItem("youdle_maxStreak")) || 0;
+    let totalGames = Number(localStorage.getItem("youdle_totalGames"));
+    let gamesWon = Number(localStorage.getItem("youdle_gamesWon"));
+
+    // ---- CASE 1: First time ever playing ----
+    if (!lastPlayed) {
+      localStorage.setItem("youdle_lastPlayed", today);
+      localStorage.setItem("youdle_totalGames", 1);
+      localStorage.setItem("youdle_gamesWon", gameWon ? 1 : 0);
+      localStorage.setItem("youdle_currentStreak", gameWon ? 1 : 0);
+      localStorage.setItem("youdle_maxStreak", gameWon ? 1 : 0);
+      console.log("first time playing! Welcome my brother!")
+      return;
+    }
+  
+    // ---- CASE 2: Already played today (refresh) ----
+    if (lastPlayed === today) {
+      console.log("nice try buddy, you can play again tomorrow");
+      return; // don’t double-count
+    }
+    else{
+      totalGames++;
+    }
+
+    if (gameWon) {
+      console.log("incrementing won games");
+      gamesWon++;
+    }
+  
+    // ---- CASE 3: Played yesterday → streak continues ----
+    const yesterday = new Date(Date.now() - 86400000)
+      .toISOString()
+      .split("T")[0];
+  
+    if (lastPlayed === yesterday && gameWon) {      
+      currentStreak++;
+      console.log("congrats! I'm incrementing your streak to:", currentStreak);
+    }
+    // ---- CASE 4: Lost today or didn't play yesterday → streak resets ----
+    else {
+      currentStreak = gameWon ? 1 : 0;
+    }
+  
+    // update max streak
+    if (currentStreak > maxStreak) {
+      maxStreak = currentStreak;
+    }
+  
+    localStorage.setItem("youdle_totalGames", totalGames);
+    localStorage.setItem("youdle_gamesWon", gamesWon);    
+    localStorage.setItem("youdle_lastPlayed", today);
+    localStorage.setItem("youdle_currentStreak", currentStreak);
+    localStorage.setItem("youdle_maxStreak", maxStreak);
+
+    console.log("currentStreak:", currentStreak);
+    console.log("maxStreak:", maxStreak);
+    console.log("totalGames:", totalGames);
+    console.log("gamesWon:", gamesWon);
+  }
+  
 }
 
 loadTopVideos();

@@ -49,8 +49,8 @@
     </div>
   </div>
   <header id="youdle-header">
-      <button id="menu-button" class="menu-button">
-        <img class="menu-icon" src="images/menu.png" alt="menu">
+      <button id="stats-button" class="menu-button">
+        <img class="menu-icon" src="images/stats.png" alt="Graph icons created by Bamicon - Flaticon"></img>
       </button>
       <img class="menu-icon" src="images/nyancat.webp" alt="Youdle Logo" width="50"/>
     <h1 id="title">You<span style="color: black;">Dle</span></h1>
@@ -79,33 +79,29 @@
     <div class="hint-section">
       <div id="hint-output"></div>
     </div>
+    <!-- Personal Stats Popup -->
     <!-- Win/Lose Popup -->
     <div id="result-modal" class="modal hidden">
       <div class="modal-content">
+        <div class="personal-stats-container">
+            <h2 id="personal-stats-title">Your Stats</h2>
+            <div class="personal-stat-content">
+              <div id="games-played" class="personal-stat"></div>
+              <div id="personal-win-rate" class="personal-stat"></div>
+              <div id="current-streak" class="personal-stat"></div>
+              <div id="max-streak" class="personal-stat"></div>
+            </div>
+        </div>
         <span id="close-results" class="close-btn">&times;</span>
-        <h2 id="result-title">You Won!</h2>
-        <img id="result-gif" src="" alt="Result animation" class="result-gif">
-
-        <!-- STATS FOR THE DAY -->
-        <span id="close-stats" class="close">&times;</span>
-
-        <h2>Today's Stats</h2>
-
-        <div class="stats-row">
-          <div class="stat-block">
-            <div class="stat-number" id="total-games">0</div>
-            <div class="stat-label">Plays</div>
-          </div>
-          <div class="stat-block">
-            <div class="stat-number" id="win-rate">0%</div>
-            <div class="stat-label">Win Rate</div>
-          </div>
+        <div class="win-screen hidden">
+          <h2 id="result-title"></h2>
+          <img id="result-gif" src="" alt="" class="result-gif">
         </div>
+        <!-- GLOBAL STATS FOR THE DAY -->
+        <div id="global-stats">
 
-        <h3>Global Guess Distribution</h3>
-        <div id="guess-distribution" class="guess-bars">
-          <!-- Bars inserted dynamically -->
         </div>
+        
       </div>
     </div>
   </div>  
